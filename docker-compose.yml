@@ -5,14 +5,13 @@ x-basics: &basics
 services:
   postiz:
     image: ghcr.io/gitroomhq/postiz-app:latest
-    container_name: social
     <<: *basics
     environment:
       - MAIN_URL=https://${POSTIZ_SUBDOMAIN}.${ROOT_DOMAIN}
       - FRONTEND_URL=https://${POSTIZ_SUBDOMAIN}.${ROOT_DOMAIN}
       - NEXT_PUBLIC_BACKEND_URL=https://${POSTIZ_SUBDOMAIN}.${ROOT_DOMAIN}/api
       - JWT_SECRET=BlahBlah1234PP!
-      - DATABASE_URL=postgresql://postiz:${POSTIZ_PASSWORD}@db-postgre:5432/postiz
+      - DATABASE_URL=postgresql://postiz:${POSTIZ_PASSWORD}@postgres:5432/postiz
       - REDIS_URL=redis://db-memory:6379
       - BACKEND_INTERNAL_URL=http://localhost:3000
       - IS_GENERAL=true
@@ -29,7 +28,7 @@ services:
         ipv4_address: 172.20.0.10
       internal:
     depends_on:
-      postgre-db:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
