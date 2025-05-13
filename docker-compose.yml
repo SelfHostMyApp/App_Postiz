@@ -1,0 +1,42 @@
+x-basics: &basics
+  env_file:
+    - .env
+  restart: unless-stopped
+services:
+  postiz:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    container_name: social
+    <<: *basics
+    environment:
+      - MAIN_URL=https://${POSTIZ_SUBDOMAIN}.${ROOT_DOMAIN}
+      - FRONTEND_URL=https://${POSTIZ_SUBDOMAIN}.${ROOT_DOMAIN}
+      - NEXT_PUBLIC_BACKEND_URL=https://${POSTIZ_SUBDOMAIN}.${ROOT_DOMAIN}/api
+      - JWT_SECRET=BlahBlah1234PP!
+      - DATABASE_URL=postgresql://postiz:${POSTIZ_PASSWORD}@db-postgre:5432/postiz
+      - REDIS_URL=redis://db-memory:6379
+      - BACKEND_INTERNAL_URL=http://localhost:3000
+      - IS_GENERAL=true
+      - STORAGE_PROVIDER=local
+      - UPLOAD_DIRECTORY=/uploads
+      - NEXT_PUBLIC_UPLOAD_DIRECTORY=/uploads
+    volumes:
+      - ./postiz_files/config:/config/
+      - ./postiz_files/uploads:/uploads/
+    ports:
+      - 5000:5000
+    networks:
+      core:
+        ipv4_address: 172.20.0.10
+      internal:
+    depends_on:
+      postgre-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.social.rule=Host(`social.zephyrex.dev`)"
+      - "traefik.http.routers.social.entrypoints=websecure"
+      - "traefik.http.routers.social.middlewares=cloudflare-ipallowlist@file"
+      - "traefik.http.routers.social.tls.certresolver=cloudflare"
+      - "traefik.http.services.social.loadbalancer.server.port=5000"
