@@ -4,6 +4,7 @@ x-basics: &basics
   restart: unless-stopped
 services:
   postiz:
+    container_name: postiz
     image: ghcr.io/gitroomhq/postiz-app:${POSTIZ_VERSION:-latest}
     <<: *basics
     environment:
