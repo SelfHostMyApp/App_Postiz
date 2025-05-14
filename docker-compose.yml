@@ -40,3 +40,5 @@ services:
       - "traefik.http.routers.social.middlewares=cloudflare-ipallowlist@file"
       - "traefik.http.routers.social.tls.certresolver=cloudflare"
       - "traefik.http.services.social.loadbalancer.server.port=4200"
+      - "traefik.http.routers.social.middlewares=${POSTIZ_AUTH:+social-auth}"
+      - "traefik.http.middlewares.social-auth.basicauth.users=${POSTIZ_AUTH}"
