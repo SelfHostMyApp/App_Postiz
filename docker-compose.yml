@@ -39,4 +39,4 @@ services:
       - "traefik.http.routers.social.entrypoints=websecure"
       - "traefik.http.routers.social.middlewares=cloudflare-ipallowlist@file"
       - "traefik.http.routers.social.tls.certresolver=cloudflare"
-      - "traefik.http.services.social.loadbalancer.server.port=${POSTIZ_PORT}"
+      - "traefik.http.services.social.loadbalancer.server.port=5000"
