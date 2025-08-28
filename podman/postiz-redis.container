@@ -1,0 +1,18 @@
+[Unit]
+Description=Postiz Redis Cache
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=docker.io/library/redis:7.2
+PodmanArgs=--pod postiz-pod
+Volume=REDIS_VOLUME_PLACEHOLDER
+DNS=8.8.8.8
+DNS=8.8.4.4
+HealthCmd=redis-cli ping
+HealthInterval=10s
+HealthTimeout=3s
+HealthRetries=3
+
+[Install]
+WantedBy=default.target

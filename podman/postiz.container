@@ -1,0 +1,26 @@
+[Unit]
+Description=Postiz Social Media Manager
+After=postiz-postgres.service postiz-redis.service
+Wants=postiz-postgres.service postiz-redis.service
+
+[Container]
+Image=ghcr.io/gitroomhq/postiz-app:latest
+PodmanArgs=--pod postiz-pod
+EnvironmentFile=ENV_FILE_PLACEHOLDER
+Environment=MAIN_URL=https://postiz.example.com
+Environment=FRONTEND_URL=https://postiz.example.com
+Environment=NEXT_PUBLIC_BACKEND_URL=https://postiz.example.com/api
+Environment=DATABASE_URL=postgresql://postiz-user:postiz_secure_password@127.0.0.1:5432/postiz-db-local
+Environment=REDIS_URL=redis://127.0.0.1:6379
+Environment=BACKEND_INTERNAL_URL=http://localhost:3000
+Environment=IS_GENERAL=true
+Environment=STORAGE_PROVIDER=local
+Environment=UPLOAD_DIRECTORY=/uploads
+Environment=NEXT_PUBLIC_UPLOAD_DIRECTORY=/uploads
+Volume=CONFIG_VOLUME_PLACEHOLDER
+Volume=UPLOADS_VOLUME_PLACEHOLDER
+DNS=8.8.8.8
+DNS=8.8.4.4
+
+[Install]
+WantedBy=default.target

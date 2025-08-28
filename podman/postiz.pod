@@ -1,0 +1,11 @@
+[Unit]
+Description=Postiz Pod
+After=network-online.target
+Wants=network-online.target
+
+[Pod]
+Network=bridge
+PublishPort=8082:5000
+
+[Install]
+WantedBy=default.target
